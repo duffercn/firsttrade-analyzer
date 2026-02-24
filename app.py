@@ -50,11 +50,20 @@ DEFAULT_PATH = "FT_CSV_export.csv"
 
 st.sidebar.title("📈 FirstTrade Analysis")
 
-with st.sidebar.expander("📂 Upload CSV", expanded=False):
-    st.caption("Upload a different CSV to analyse it. Leave empty to use the default file.")
-    uploaded_file = st.file_uploader(
-        "CSV file", type=["csv"], label_visibility="collapsed",
-    )
+st.sidebar.markdown("**Data source**")
+uploaded_file = st.sidebar.file_uploader(
+    "Upload your FirstTrade CSV",
+    type=["csv"],
+    help="Export your trading history from FirstTrade and upload it here. "
+         "If left empty the default file on disk is used.",
+    label_visibility="collapsed",
+)
+if uploaded_file is not None:
+    st.sidebar.success(f"Loaded: {uploaded_file.name}")
+else:
+    st.sidebar.caption("Using default file on disk")
+
+st.sidebar.divider()
 
 page = st.sidebar.radio(
     "Navigate",
