@@ -27,7 +27,7 @@ pip install streamlit pandas plotly numpy yfinance watchdog
 
 1. Export your trading history from FirstTrade as a CSV.
 2. Place the CSV in this directory (or upload it via the sidebar widget).
-3. Edit `DEFAULT_PATH` in `app.py` if your filename differs from `FT_CSV_export.csv`.
+3. Edit `DEFAULT_PATH` in `app.py` to match your exported filename (e.g. `FT_CSV_export.csv`), or simply upload the file via the sidebar widget without changing any code.
 4. Run:
 
 ```bash
