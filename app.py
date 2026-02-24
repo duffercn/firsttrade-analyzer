@@ -1,3 +1,4 @@
+import glob
 import io
 import pandas as pd
 import plotly.express as px
@@ -42,7 +43,23 @@ st.set_page_config(
     layout="wide",
 )
 
-DEFAULT_PATH = "FT_CSV_export.csv"
+def _find_default_csv() -> str | None:
+    """
+    Auto-detect a FirstTrade export CSV in the current directory.
+    Priority: FT_CSV_*.csv  →  any single *.csv file present.
+    Returns None if nothing is found (user must upload via the sidebar).
+    """
+    # FirstTrade exports are named FT_CSV_<account>.csv
+    matches = sorted(glob.glob("FT_CSV_*.csv"))
+    if matches:
+        return matches[0]
+    # Fallback: if exactly one CSV exists, use it
+    all_csvs = sorted(glob.glob("*.csv"))
+    if len(all_csvs) == 1:
+        return all_csvs[0]
+    return None
+
+DEFAULT_PATH = _find_default_csv()
 
 # ---------------------------------------------------------------------------
 # Sidebar: navigation (file upload moved here too)
@@ -60,8 +77,10 @@ uploaded_file = st.sidebar.file_uploader(
 )
 if uploaded_file is not None:
     st.sidebar.success(f"Loaded: {uploaded_file.name}")
+elif DEFAULT_PATH:
+    st.sidebar.caption(f"Using: {DEFAULT_PATH}")
 else:
-    st.sidebar.caption("Using default file on disk")
+    st.sidebar.warning("No CSV found. Please upload your FirstTrade export above.")
 
 st.sidebar.divider()
 
@@ -102,6 +121,16 @@ def _load_all_path(path: str):
     tl_       = build_unified_trade_log(sp_, op_)
     return df_, sp_, op_, dp_, tl_
 
+
+if uploaded_file is None and DEFAULT_PATH is None:
+    st.title("📈 FirstTrade Analysis")
+    st.info(
+        "No CSV file found in this directory.\n\n"
+        "Export your trading history from FirstTrade and upload it using the "
+        "**Upload your FirstTrade CSV** widget in the sidebar, or place the file "
+        "in the same folder as `app.py` (it will be detected automatically)."
+    )
+    st.stop()
 
 with st.spinner("Loading and analysing trading data…"):
     if uploaded_file is not None:
