@@ -7,6 +7,7 @@ import streamlit as st
 import numpy as np
 
 import perf_page
+import intraday_page
 
 from utils import (
     account_overview,
@@ -93,6 +94,7 @@ page = st.sidebar.radio(
         "Symbol + Day",
         "Options Analysis",
         "Performance Analysis",
+        "Intra-Day Trading",
         "Open Positions",
         "Tax Summary",
     ],
@@ -1095,6 +1097,14 @@ elif page == "Options Analysis":
 
 elif page == "Performance Analysis":
     perf_page.render(trade_log_df, opt_pnl_df, fmt)
+
+
+# ---------------------------------------------------------------------------
+# Page: Intra-Day Trading
+# ---------------------------------------------------------------------------
+
+elif page == "Intra-Day Trading":
+    intraday_page.render(df, stock_pnl_df, opt_pnl_df, fmt)
 
 
 # ---------------------------------------------------------------------------
