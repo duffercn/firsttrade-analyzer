@@ -129,7 +129,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
             xaxis_title="Realized P&L ($)", yaxis_title="# Trades",
             height=320, margin=dict(t=40),
         )
-        st.plotly_chart(fig_hist, use_container_width=True)
+        st.plotly_chart(fig_hist, width='stretch')
 
     with dist_col2:
         fig_wb = go.Figure(go.Bar(
@@ -143,7 +143,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
             title=f"Avg Win vs Avg Loss  (R:R = {stats['rr_ratio']:.2f}x)",
             yaxis_title="$", height=320, margin=dict(t=40),
         )
-        st.plotly_chart(fig_wb, use_container_width=True)
+        st.plotly_chart(fig_wb, width='stretch')
 
     st.divider()
 
@@ -183,7 +183,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
             xaxis_title="Date",
             height=300, margin=dict(t=20),
         )
-        st.plotly_chart(fig_rwr, use_container_width=True)
+        st.plotly_chart(fig_rwr, width='stretch')
         st.caption(
             "Periods **below 50%** (red) indicate the strategy was losing more "
             "than half its trades in that stretch. Look for what changed."
@@ -210,7 +210,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
             title="Hold Time: Winners vs Losers",
             yaxis_title="Days held", height=340, margin=dict(t=40),
         )
-        st.plotly_chart(fig_box, use_container_width=True)
+        st.plotly_chart(fig_box, width='stretch')
 
     with ht_col2:
         # Scatter: hold days vs P&L, sized by |P&L|
@@ -229,7 +229,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
         )
         fig_sc.add_hline(y=0, line_dash="dash", line_color="white", opacity=0.4)
         fig_sc.update_layout(height=340, margin=dict(t=40))
-        st.plotly_chart(fig_sc, use_container_width=True)
+        st.plotly_chart(fig_sc, width='stretch')
 
     st.divider()
 
@@ -272,7 +272,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
                 legend=dict(orientation="h", y=1.1),
                 height=340, margin=dict(t=50),
             )
-            st.plotly_chart(fig_dow, use_container_width=True)
+            st.plotly_chart(fig_dow, width='stretch')
 
     with pat_col2:
         if not month_df.empty:
@@ -305,7 +305,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
                 legend=dict(orientation="h", y=1.1),
                 height=340, margin=dict(t=50),
             )
-            st.plotly_chart(fig_mo, use_container_width=True)
+            st.plotly_chart(fig_mo, width='stretch')
 
     st.divider()
 
@@ -336,7 +336,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
             title="Top 10 Symbols by Total P&L",
             yaxis_title="Total P&L ($)", height=280, margin=dict(t=40),
         )
-        st.plotly_chart(fig_rank, use_container_width=True)
+        st.plotly_chart(fig_rank, width='stretch')
 
     # Full ranking table
     disp = ranking_sorted.copy()
@@ -356,7 +356,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
         "BestTrade": "Best", "WorstTrade": "Worst",
         "ProfitFactor": "Prof. Factor", "AvgHoldDays": "Avg Hold",
     })
-    st.dataframe(disp, use_container_width=True, hide_index=True)
+    st.dataframe(disp, width='stretch', hide_index=True)
     st.download_button(
         label="⬇ Download Symbol Ranking CSV",
         data=ranking.to_csv(index=False).encode("utf-8"),
@@ -407,7 +407,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
             ))
 
         fig_sz.update_layout(height=400, margin=dict(t=40))
-        st.plotly_chart(fig_sz, use_container_width=True)
+        st.plotly_chart(fig_sz, width='stretch')
 
         # Quartile breakdown
         sizing["SizeQuartile"] = pd.qcut(
@@ -474,7 +474,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
                 st.dataframe(dte_disp.rename(columns={
                     "DTEBucket": "DTE at Open", "WinRate": "Win Rate",
                     "TotalPnL": "Total P&L", "AvgPnL": "Avg P&L",
-                }), use_container_width=True, hide_index=True)
+                }), width='stretch', hide_index=True)
 
             with dte_col2:
                 fig_dte = go.Figure()
@@ -500,7 +500,7 @@ def render(trade_log_df, opt_pnl_df, fmt):
                     legend=dict(orientation="h", y=1.1),
                     height=340, margin=dict(t=50),
                 )
-                st.plotly_chart(fig_dte, use_container_width=True)
+                st.plotly_chart(fig_dte, width='stretch')
 
         # Scatter: DTE vs P&L
         opt_scatter = dd["opt_with_dte"]
@@ -524,4 +524,4 @@ def render(trade_log_df, opt_pnl_df, fmt):
             )
             fig_dte_sc.add_hline(y=0, line_dash="dash", line_color="white", opacity=0.4)
             fig_dte_sc.update_layout(height=360, margin=dict(t=40))
-            st.plotly_chart(fig_dte_sc, use_container_width=True)
+            st.plotly_chart(fig_dte_sc, width='stretch')

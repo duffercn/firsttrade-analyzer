@@ -228,13 +228,13 @@ if page == "Account Overview":
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
         height=420, margin=dict(t=40),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     with st.expander("Monthly breakdown table"):
         display = monthly.copy()
         for col in ["StockPnL", "OptionPnL", "Dividends", "MarginInterest", "TotalPnL"]:
             display[col] = display[col].map(lambda v: f"${v:,.2f}")
-        st.dataframe(display, use_container_width=True, hide_index=True)
+        st.dataframe(display, width='stretch', hide_index=True)
         csv_download(monthly, "monthly_pnl.csv")
 
     st.divider()
@@ -269,7 +269,7 @@ if page == "Account Overview":
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
             height=300, margin=dict(t=40),
         )
-        st.plotly_chart(fig_eq, use_container_width=True)
+        st.plotly_chart(fig_eq, width='stretch')
 
         fig_dd = go.Figure()
         fig_dd.add_trace(go.Scatter(
@@ -283,7 +283,7 @@ if page == "Account Overview":
             yaxis_title="Drawdown from Peak ($)",
             height=200, margin=dict(t=20, b=20),
         )
-        st.plotly_chart(fig_dd, use_container_width=True)
+        st.plotly_chart(fig_dd, width='stretch')
 
     st.divider()
 
@@ -340,7 +340,7 @@ if page == "Account Overview":
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
             height=320, margin=dict(t=40),
         )
-        st.plotly_chart(fig_bench, use_container_width=True)
+        st.plotly_chart(fig_bench, width='stretch')
         st.caption(
             "Note: Your P&L shown is **realized only** (closed trades + dividends). "
             "Unrealized gains on open positions are not included."
@@ -431,8 +431,8 @@ if page == "Account Overview":
             z=z, text=hover,
             hovertemplate="%{text}<extra></extra>",
             colorscale=[
-                [0.00, "#7f0000"], [0.35, "#ff4b4b"],
-                [0.50, "#2d2d3a"], [0.65, "#00c97a"], [1.00, "#004d1f"],
+                [0.00, "#8B0000"], [0.40, "#ff6b6b"],
+                [0.50, "#cccccc"], [0.60, "#4dbb78"], [1.00, "#1a5c32"],
             ],
             zmid=0, zmin=-abs_max, zmax=abs_max,
             showscale=True,
@@ -449,7 +449,7 @@ if page == "Account Overview":
             ),
             height=240, margin=dict(t=50, b=10, l=55, r=80),
         )
-        st.plotly_chart(fig_cal, use_container_width=True)
+        st.plotly_chart(fig_cal, width='stretch')
 
         active_days = year_df[year_df["TotalPnL"] != 0]
         win_days    = active_days[active_days["TotalPnL"] > 0]
@@ -490,7 +490,7 @@ if page == "Account Overview":
                     visible="legendonly",
                 ))
         fig_wk.update_layout(xaxis_tickangle=-45)
-        st.plotly_chart(fig_wk, use_container_width=True)
+        st.plotly_chart(fig_wk, width='stretch')
 
         s1, s2, s3, s4, s5 = st.columns(5)
         pos = week_grp[week_grp["TotalPnL"] > 0]
@@ -532,7 +532,7 @@ if page == "Account Overview":
                     line=dict(color=clr, width=1.5, dash="dot"),
                     visible="legendonly",
                 ))
-        st.plotly_chart(fig_mo, use_container_width=True)
+        st.plotly_chart(fig_mo, width='stretch')
 
         s1, s2, s3, s4 = st.columns(4)
         pos = mon_grp[mon_grp["TotalPnL"] > 0]
@@ -564,7 +564,7 @@ if page == "Account Overview":
                     x=yr_agg["Year"].astype(str), y=yr_agg[col],
                     name=name, marker_color=clr, visible="legendonly",
                 ))
-        st.plotly_chart(fig_yr, use_container_width=True)
+        st.plotly_chart(fig_yr, width='stretch')
 
         for _, row in yr_agg.iterrows():
             st.markdown(
@@ -621,7 +621,7 @@ elif page == "Symbol Analysis":
             )
             fig2.update_traces(line_color="#4C9BE8", fillcolor="rgba(76,155,232,0.15)")
             fig2.update_layout(height=300, margin=dict(t=40))
-            st.plotly_chart(fig2, use_container_width=True)
+            st.plotly_chart(fig2, width='stretch')
 
             bar_colors = ["#00c97a" if v >= 0 else "#ff4b4b" for v in sells["RealizedPnL"]]
             fig3 = go.Figure(go.Bar(
@@ -635,7 +635,7 @@ elif page == "Symbol Analysis":
                 title=f"{sym} — P&L per Sell Trade",
                 yaxis_title="P&L ($)", height=300, margin=dict(t=40),
             )
-            st.plotly_chart(fig3, use_container_width=True)
+            st.plotly_chart(fig3, width='stretch')
 
         st.subheader("Full Trade History")
         display_cols = ["TradeDate", "Action", "Quantity", "Price", "Amount",
@@ -647,7 +647,7 @@ elif page == "Symbol Analysis":
         })
         st.dataframe(
             show.style.map(style_pnl, subset=["Realized P&L"]),
-            use_container_width=True, hide_index=True,
+            width='stretch', hide_index=True,
         )
         csv_download(show, f"{sym}_trades.csv")
 
@@ -657,7 +657,7 @@ elif page == "Symbol Analysis":
             st.subheader("Dividend History")
             d = sym_divs[["TradeDate", "Amount", "Description"]].copy()
             d["TradeDate"] = d["TradeDate"].dt.strftime("%Y-%m-%d")
-            st.dataframe(d, use_container_width=True, hide_index=True)
+            st.dataframe(d, width='stretch', hide_index=True)
 
         # ── Options section ──────────────────────────────────────────────────
         st.divider()
@@ -729,7 +729,7 @@ elif page == "Symbol Analysis":
                 legend=dict(orientation="h", yanchor="bottom", y=1.02),
                 height=320, margin=dict(t=40),
             )
-            st.plotly_chart(fig_combo, use_container_width=True)
+            st.plotly_chart(fig_combo, width='stretch')
 
             if not closed_opts.empty:
                 closed_sorted = closed_opts.sort_values("OpenDate").copy()
@@ -765,7 +765,7 @@ elif page == "Symbol Analysis":
                     xaxis_tickangle=-35,
                     height=380, margin=dict(t=40, b=120),
                 )
-                st.plotly_chart(fig_opt_bar, use_container_width=True)
+                st.plotly_chart(fig_opt_bar, width='stretch')
 
             st.markdown("#### All Options Contracts")
             disp_o = sym_opts.copy()
@@ -788,7 +788,7 @@ elif page == "Symbol Analysis":
                          "Open Date", "Close Date", "Premium Paid", "Proceeds", "P&L", "Outcome"]
             st.dataframe(
                 disp_o[show_cols].style.map(style_pnl, subset=["P&L"]),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
             csv_download(exp_o, f"{sym}_options.csv")
 
@@ -837,35 +837,35 @@ elif page == "Daily View":
         if not dm["stock_trades"].empty:
             st.subheader("Stock Trades")
             cols = ["Symbol", "Action", "Quantity", "Price", "Amount", "Fee"]
-            st.dataframe(dm["stock_trades"][cols], use_container_width=True, hide_index=True)
+            st.dataframe(dm["stock_trades"][cols], width='stretch', hide_index=True)
             csv_download(dm["stock_trades"][cols], f"{selected_date}_stock_trades.csv")
 
         if not dm["option_trades"].empty:
             st.subheader("Options Trades")
             ocols = ["OptionUnderlying", "OptionType", "OptionStrike", "OptionExpiry",
                      "OptionStatus", "Action", "Quantity", "Price", "Amount", "Fee"]
-            st.dataframe(dm["option_trades"][ocols], use_container_width=True, hide_index=True)
+            st.dataframe(dm["option_trades"][ocols], width='stretch', hide_index=True)
             csv_download(dm["option_trades"][ocols], f"{selected_date}_option_trades.csv")
 
         if not dm["option_pnl_rows"].empty:
             st.subheader("Options Closed/Expired Today — P&L")
             st.dataframe(
                 dm["option_pnl_rows"].style.map(style_pnl, subset=["RealizedPnL"]),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
         if not dm["dividends"].empty:
             st.subheader("Dividends")
             st.dataframe(
                 dm["dividends"][["Symbol", "Amount", "Description"]],
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
         if not dm["interest"].empty:
             st.subheader("Interest")
             st.dataframe(
                 dm["interest"][["Amount", "Description"]],
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
 
@@ -926,7 +926,7 @@ elif page == "Symbol + Day":
             )
             st.dataframe(
                 show.style.map(style_pnl, subset=["Realized P&L"]),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
             if not day_rows.empty:
@@ -951,26 +951,26 @@ elif page == "Symbol + Day":
                         title="Cash Flow per Trade", yaxis_title="Amount ($)",
                         height=300, margin=dict(t=40),
                     )
-                    st.plotly_chart(fig_wf, use_container_width=True)
+                    st.plotly_chart(fig_wf, width='stretch')
 
         if not dm["option_trades"].empty:
             st.subheader("Options Activity")
             ocols = ["OptionType", "OptionStrike", "OptionExpiry",
                      "OptionStatus", "Action", "Quantity", "Price", "Amount"]
-            st.dataframe(dm["option_trades"][ocols], use_container_width=True, hide_index=True)
+            st.dataframe(dm["option_trades"][ocols], width='stretch', hide_index=True)
 
         if not dm["option_pnl_rows"].empty:
             st.subheader("Options Closed/Expired — P&L")
             st.dataframe(
                 dm["option_pnl_rows"].style.map(style_pnl, subset=["RealizedPnL"]),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
         if not dm["dividends"].empty:
             st.subheader("Dividends")
             st.dataframe(
                 dm["dividends"][["Amount", "Description"]],
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
 
@@ -1028,7 +1028,7 @@ elif page == "Options Analysis":
             textposition="outside",
         ))
         fig_sym.update_layout(yaxis_title="Realized P&L ($)", height=350, margin=dict(t=20))
-        st.plotly_chart(fig_sym, use_container_width=True)
+        st.plotly_chart(fig_sym, width='stretch')
 
         outcome_counts = opt_pnl["Outcome"].value_counts().reset_index()
         outcome_counts.columns = ["Outcome", "Count"]
@@ -1044,7 +1044,7 @@ elif page == "Options Analysis":
 
         col_pie, col_bar = st.columns([1, 2])
         with col_pie:
-            st.plotly_chart(fig_pie, use_container_width=True)
+            st.plotly_chart(fig_pie, width='stretch')
         with col_bar:
             fig_dist = px.histogram(
                 closed.copy(), x="RealizedPnL", nbins=20,
@@ -1053,7 +1053,7 @@ elif page == "Options Analysis":
                 labels={"RealizedPnL": "Realized P&L ($)"},
             )
             fig_dist.update_layout(height=320, margin=dict(t=40))
-            st.plotly_chart(fig_dist, use_container_width=True)
+            st.plotly_chart(fig_dist, width='stretch')
 
         st.divider()
 
@@ -1080,12 +1080,12 @@ elif page == "Options Analysis":
                 lambda v: f"${v:,.2f}" if pd.notna(v) else "—"
             )
 
-        st.dataframe(display_opts, use_container_width=True, hide_index=True)
+        st.dataframe(display_opts, width='stretch', hide_index=True)
         csv_download(export_opts, "options_analysis.csv")
 
         if not still_open.empty:
             st.subheader("Still Open Positions")
-            st.dataframe(still_open, use_container_width=True, hide_index=True)
+            st.dataframe(still_open, width='stretch', hide_index=True)
             csv_download(still_open, "options_still_open.csv")
 
 
@@ -1179,7 +1179,7 @@ elif page == "Open Positions":
             "TotalCost":    "Cost Basis",
             "LastTradeDate": "Last Trade",
         })
-        st.dataframe(disp, use_container_width=True, hide_index=True)
+        st.dataframe(disp, width='stretch', hide_index=True)
         csv_download(open_pos, "open_positions.csv")
 
         # Portfolio pie chart
@@ -1190,7 +1190,7 @@ elif page == "Open Positions":
         )
         fig_pie.update_traces(textposition="inside", textinfo="percent+label")
         fig_pie.update_layout(height=420)
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
 
     # ── Open options ─────────────────────────────────────────────────────────
     st.subheader("Open Option Positions")
@@ -1207,7 +1207,7 @@ elif page == "Open Positions":
         disp_opts["OpenCost"] = disp_opts["OpenCost"].map(lambda v: f"${v:,.2f}")
         show_cols = ["Underlying", "OptionType", "OptionStrike", "OptionExpiry",
                      "OpenDate", "Contracts", "OpenCost"]
-        st.dataframe(disp_opts[show_cols], use_container_width=True, hide_index=True)
+        st.dataframe(disp_opts[show_cols], width='stretch', hide_index=True)
         csv_download(open_opts[show_cols], "open_options.csv")
 
 
@@ -1277,7 +1277,7 @@ elif page == "Tax Summary":
         yaxis_title="Amount ($)", height=380, margin=dict(t=40),
         showlegend=False,
     )
-    st.plotly_chart(fig_tax, use_container_width=True)
+    st.plotly_chart(fig_tax, width='stretch')
 
     st.divider()
 
@@ -1296,7 +1296,7 @@ elif page == "Tax Summary":
             st_disp["RealizedPnL"] = st_disp["RealizedPnL"].map(lambda v: f"${v:,.2f}")
             st.dataframe(
                 st_disp.style.map(style_pnl, subset=["RealizedPnL"]),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
             csv_download(tax["short_term_df"], "short_term_trades.csv")
 
@@ -1313,6 +1313,6 @@ elif page == "Tax Summary":
             lt_disp["RealizedPnL"] = lt_disp["RealizedPnL"].map(lambda v: f"${v:,.2f}")
             st.dataframe(
                 lt_disp.style.map(style_pnl, subset=["RealizedPnL"]),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
             csv_download(tax["long_term_df"], "long_term_trades.csv")
